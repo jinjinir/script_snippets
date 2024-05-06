@@ -33,7 +33,9 @@ with open(PASSFILE, "r", encoding="utf-8") as passfile:
 
         headers = {
             'Content-Type' : 'application/x-www-form-urlencoded',
-            'Referer' : 'http://83.136.253.251:43964/'
+            'Referer' : 'http://83.136.253.251:43964/',
+            # fake user agent presenting as a chromium browser. change as needed
+            "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.96 Safari/537.36",
         }
 
         # do the request
