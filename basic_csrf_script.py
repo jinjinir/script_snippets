@@ -21,7 +21,9 @@ HEADERS: dict = {
     "Origin": "https://0ad0003704be927380209a2500c500a8.web-security-academy.net",
 
     # fake user agent presenting as a chromium browser. change as needed
-    "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.96 Safari/537.36",
+    "User-Agent": 
+            "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 " +
+            "(KHTML, like Gecko) Chrome/88.0.4324.96 Safari/537.36",
 }
 
 # message to look for in the response
